@@ -1,0 +1,7 @@
+[Unit]
+Description=Tesla BLE adapter wedge watchdog (reboots on ENOSYS wedge)
+After=tesla-ble-api.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/tesla-wedge-watchdog.sh

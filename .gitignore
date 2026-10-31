@@ -1,0 +1,21 @@
+# Never commit car credentials or secrets
+*.pem
+*.key
+api_token
+token
+cache.json
+tesla/
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Editors / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store

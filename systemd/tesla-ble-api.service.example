@@ -1,0 +1,40 @@
+[Unit]
+Description=Tesla BLE REST API
+After=network-online.target bluetooth.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+# --- EDIT THESE ---
+User=youruser
+Group=youruser
+WorkingDirectory=/home/youruser/tesla-ble-api
+ExecStart=/usr/bin/python3 /home/youruser/tesla-ble-api/server.py
+# Your car's VIN (17 chars).
+Environment=TESLA_VIN=YOUR_VIN_HERE
+# ------------------
+Environment=TESLA_API_PORT=8710
+# Bind to the LAN or to 127.0.0.1. Keep this box on a trusted network.
+Environment=TESLA_API_BIND=0.0.0.0
+# Bluetooth adapter: hci0 = onboard, hci1 = a USB BT dongle.
+# A USB dongle is STRONGLY recommended on Wi-Fi+BT combo chips (see README).
+Environment=TESLA_BT_ADAPTER=hci1
+# Key material + token directory (private_key.pem, cache.json, api_token).
+Environment=TESLA_DIR=/home/youruser/tesla
+# Keep-awake is OFF by default (0). Only turn it on for a flaky onboard
+# adapter where you can't use a USB dongle — see README.
+Environment=TESLA_KEEPALIVE_INTERVAL=180
+Environment=TESLA_KEEPALIVE_AUTOSTART_MIN=0
+
+# If the onboard Bluetooth comes up soft-blocked on your board, unblock it
+# before start (runs as root via the leading '+'). Harmless if already unblocked.
+ExecStartPre=+/bin/sh -c '/usr/sbin/rfkill unblock bluetooth 2>/dev/null || rfkill unblock bluetooth || true'
+
+Restart=on-failure
+RestartSec=3
+
+# NOTE: do NOT set NoNewPrivileges=yes — it strips the file capabilities
+# (cap_net_admin,cap_net_raw) that tesla-control needs for raw HCI/BLE.
+
+[Install]
+WantedBy=multi-user.target

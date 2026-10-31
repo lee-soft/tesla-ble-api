@@ -1,0 +1,10 @@
+[Unit]
+Description=Run the Tesla BLE wedge watchdog every 2 minutes
+
+[Timer]
+OnBootSec=150
+OnUnitActiveSec=120
+AccuracySec=10
+
+[Install]
+WantedBy=timers.target
